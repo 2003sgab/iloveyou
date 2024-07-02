@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta</title>
+    <style>
+        @font-face {
+            font-family: 'Digitalix';
+            src: url('Digitalix.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Code';
+            src: url('CODE.otf') format('truetype');
+        }
+
+        body {
+            font-family: 'Digitalix', Arial, sans-serif;
+            padding: 20px;
+            height: auto;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #262123;
+            background-size: cover;
+        }
+
+        #conteudo {
+            background: transparent;
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .digitando {
+            font-family: 'Digitalix', cursive;
+            font-size: 20px;
+            color: #cecdcb;
+            text-shadow: 2px 2px 0 #008080;
+            white-space: normal;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background: none; /* Remover fundo */
+            font-size: 20px;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Code', cursive;
+            font-weight: bold;
+        }
+
+        .btn.no {
+            color: white; /* Garantir a cor do texto para o botão "NÃO" */
+        }
+
+        .video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        #macaquinho {
+            display: none;
+        }
+
+        #macaquinho img {
+            max-width: 100%;
+        }
+    </style>
+    <video id="meuVideo" class="video">
+        <source src="Arquivos/Videos/Fotos.mp4" type="video/mp4">
+    </video>
+</head>
+<body>
+    <div id="conteudo">
+        <div class="caixa-texto">
+            <h2 id="texto" class="digitando"></h2>
+        </div>
+        <div class="btn-container">
+            <button class="btn" id="btnSim" style="display: none;" onclick="sim()">[SIM]</button>
+            <button class="btn no" id="nao" style="display: none;" onmouseover="desvia(this)">[NÃO]</button>
+        </div>
+    </div>
+    <div id="macaquinho"></div> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var desvios = 0;
+            var meuVideo = document.getElementById('meuVideo');
+            var texto = "<Você aceita ser meu parceiro nesta jornada, repleta de aventuras e carinho, onde seremos mais que namorados, seremos cúmplices, amigos, parceiros, aliados e confidentes? Juntos sempre, como macaquinhos, gatinhos e vampirinhos, eu sendo seu farmacêutico e você meu enfermeiro, eu procurando e você aplicando, construindo nossa história, cheia de risos, abraços, boiolices e amor. Aceita ouvir eu todo dia imitando a mãe Michelly da Cigana, dançando Luisa Sonza e Kpop, depois fingindo ter pose de machão, compartilhando cada momento, até Aruanda, onde nosso amor será eternizado?/>";
+            var index = 0;
+
+            function typeWriter() {
+                if (index < texto.length) {
+                    document.getElementById("texto").innerHTML += texto.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 50);
+                } else {
+                    document.getElementById('nao').style.display = 'inline-block'; // Exibir o botão "NÃO"
+                }
+            }
+            typeWriter();
+
+            meuVideo.addEventListener('loadedmetadata', function() {
+                meuVideo.play();
+            });
+
+            function sim() {
+                document.getElementById('texto').style.display = 'none'; // Esconder o texto digitado
+                document.getElementById('nao').style.display = 'none';
+                document.getElementById('btnSim').style.display = 'none';
+
+                var img = document.createElement('img');
+                img.src = 'Arquivos/Imagens/macaquin.jpg';
+                img.alt = 'Macaquin';
+                img.style.maxWidth = '80%';
+
+                var macaquinhoDiv = document.getElementById('macaquinho');
+                macaquinhoDiv.innerHTML = ''; // Limpar conteúdo anterior
+                macaquinhoDiv.appendChild(img); // Adicionar a nova imagem
+                macaquinhoDiv.style.display = 'block'; // Tornar o div visível
+
+                setTimeout(function() {
+                    alert('EBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+                    macaquinhoDiv.style.display = 'none';
+                    var conteudo = document.getElementById('conteudo');
+                    conteudo.style.display = 'none';
+                    meuVideo.style.display = 'block';
+                    meuVideo.play();
+                }, 50);
+
+                meuVideo.addEventListener('ended', function() {
+                    meuVideo.style.display = 'none';
+                    window.location.href = 'Convite.html';
+                });
+            }
+
+            function desvia(btn) {
+                btn.style.position = 'absolute';
+                btn.style.bottom = geraPosicao(10, 90);
+                btn.style.left = geraPosicao(10, 90);
+                console.log('opa, desviei...');
+                desvios++;
+                if (desvios === 3) {
+                    document.getElementById('btnSim').style.display = 'block';
+                }
+            }
+
+            function geraPosicao(min, max) {
+                return (Math.random() * (max - min) + min) + "%";
+            }
+
+            window.sim = sim;
+            window.desvia = desvia;
+        });
+    </script>
+</body>
+</html>

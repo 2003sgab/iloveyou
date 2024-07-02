@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casamento</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .video2 {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .background {
+            width: 100vw;
+            height: 100vh;
+            background-image: url('Arquivos/Imagens/fundo-casamento.jpg'); /* Substitua pelo caminho da sua imagem de fundo */
+            background-size: cover;
+            background-position: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            display: none;
+            opacity: 0;
+        }
+
+        .overlay {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
+            z-index: 0;
+            display: none;
+        }
+
+        .fade-in-background {
+            opacity: 0;
+            animation: fadeBackground 2s ease-in-out forwards;
+        }
+
+        @keyframes fadeBackground {
+            35% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .text-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-size: 1.5em;
+            border-radius: 10px;
+            z-index: 3;
+            text-align: center; /* Centraliza o texto */
+            display: none;
+        }
+
+        .typing {
+            display: inline;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-bottom: 20px; /* Espaço abaixo do texto */
+        }
+
+        .start-btn {
+            display: block; /* Mudança para block para posicionar abaixo */
+            margin-top: 10px; /* Espaço entre o texto e o botão */
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            background-color: transparent; /* Fundo transparente */
+            border: none; /* Sem borda */
+            width: 90px; /* Largura do botão */
+            height: 90px; /* Altura do botão */
+            margin-left: auto; /* Alinhar à direita */
+            margin-right: 20px; /* Espaço à direita */
+        }
+
+        .start-btn img {
+            width: 100%; /* Garante que a imagem ocupe todo o espaço do botão */
+            height: auto;
+            border-radius: inherit; /* Herda a borda arredondada do botão */
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+<body onload="iniciarVideo();">
+
+    <video id="meuVideo" class="video2" preload="auto" autoplay muted>
+        <source src="Arquivos/Videos/Trem.mp4" type="video/mp4">
+        Seu navegador não suporta o elemento de vídeo.
+    </video>
+
+    <div class="background" id="background"></div>
+    <div class="overlay"></div> <!-- Fundo escuro -->
+    <div class="text-box" id="textBox">
+        <span id="typingText" class="typing"></span>
+        <br>
+        <input type="text" id="respostaJhonatan" style="margin-top: 20px; width: 200px; font-size: 1em; display: none;" onkeypress="checkEnter(event)">
+    </div>
+
+    <audio id="minhaMusica" loop>
+        <source src="Arquivos/Musicas/entrada.mp3" type="audio/mp3">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <audio id="warofHearts" loop>
+        <source src="Arquivos/Musicas/warofhearts.mp3" type="audio/mp3">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+
+    <script>
+        var atoAtual = 2; // Começa no Ato 3
+
+        function iniciarVideo() {
+            var meuVideo = document.getElementById('meuVideo');
+            meuVideo.style.display = 'block';
+
+            meuVideo.onloadedmetadata = function() {
+                // Define o vídeo para reprodução automática e mudo
+                meuVideo.play().then(() => {
+                    console.log("Vídeo está sendo reproduzido");
+                }).catch(error => {
+                    console.error("Erro ao tentar reproduzir o vídeo:", error);
+                });
+            };
+
+            // Evita o clique direito no vídeo
+            meuVideo.oncontextmenu = function() {
+                return false;
+            };
+
+            // Desabilita os controles do vídeo
+            meuVideo.controls = false;
+
+            meuVideo.onended = function() {
+                meuVideo.style.display = 'none';
+                var background = document.getElementById('background');
+                var overlay = document.querySelector('.overlay'); // Seleciona o overlay
+                var textBox = document.getElementById('textBox');
+                background.style.display = 'block';
+                overlay.style.display = 'block'; // Mostra o overlay
+                textBox.style.display = 'block';
+                background.classList.add('fade-in-background'); // Adiciona a classe para o fade-in
+                document.getElementById('minhaMusica').play();
+                typeText("Celebrante", "Caros amigos, hoje nos reunimos aqui para celebrar o amor e a união de duas almas. Este é um momento de alegria e significado profundo, onde Jhonatan de Freitas Almeida e Gabriel Rezende Maia escolhem um ao outro para compartilhar suas vidas, suas alegrias e seus desafios.");
+            };
+
+            // Event listener para a tecla espaço
+            document.addEventListener('keydown', function(event) {
+                if (event.code === 'Space') {
+                    avancarAto();
+                }
+            });
+        }
+
+        function typeText(personagem, texto) {
+            var typingText = document.getElementById('typingText');
+            typingText.innerHTML = '<strong>' + personagem + ':</strong> '; // Exibe o nome do personagem
+            var index = 0;
+            var typingInterval = setInterval(function() {
+                typingText.innerHTML += texto.charAt(index);
+                index++;
+                if (index > texto.length - 1) {
+                    clearInterval(typingInterval);
+                    setTimeout(function() {
+                        if (atoAtual === 8) {
+                            document.getElementById('respostaJhonatan').style.display = 'inline';
+                            document.getElementById('typingText').innerHTML = '<strong>' + personagem + ':</strong> ' + texto + '<br><br><span style="font-size: 0.8em; color: #fff; animation: blink-caret 0.75s step-end infinite;">Digite sua resposta</span>';
+                        } else {
+                            typingText.innerHTML += '<br><br><span style="font-size: 0.8em; color: #fff; animation: blink-caret 0.75s step-end infinite;">Aperte espaço para prosseguir</span>';
+                        }
+                    }, 500);
+                }
+            }, 50); // Velocidade de digitação (em milissegundos)
+        }
+
+        function checkEnter(event) {
+            if (event.key === 'Enter') {
+                avancarAto();
+            }
+        }
+
+        function avancarAto() {
+            atoAtual++;
+
+            switch (atoAtual) {
+                case 3:
+                    typeText("Celebrante", "Os noivos podem trocar os votos!")
+                    break;
+                case 4:
+                    typeText("Gabriel", "Sempre que eu te olho eu renovo a promessa e gratidão que tenho comigo por te escolher e contigo por me escolher, seu sorriso me fascina podendo te olhar o dia todo, vindo dele a maior vontade de te proteger, o olhar de alguém gentil que vale a pena lutar pela felicidade ao seu lado, prometo sempre te amar e cuidar de você e só tenho a agradecer por ter você em minha vida, meu pequeno macaquin.");
+                    break;
+                case 5:
+                    typeText("Jhonatan", "TU!")
+                    break;
+                case 6:
+                    typeText("Celebrante", "Que belas palavras de compromisso e amor. \nGabriel Rezende Maia, você aceita Jhonatan de Freitas Almeida como seu esposo, prometendo amá-lo, respeitá-lo e apoiá-lo em todos os momentos?");
+                    break;
+                case 7:                    
+                    typeText("Gabriel", "Aceito.");
+                    break;
+                case 8:                                 
+                    document.getElementById('respostaJhonatan').style.display = 'inline';
+                    typeText("Celebrante", "E Jhonatan de Freitas Almeida você aceita Gabriel Rezende Maia como seu esposo, prometendo amá-lo, respeitá-lo e apoiá-lo em todos os momentos?");
+                    var resposta = document.getElementById('respostaJhonatan').value.trim().toLowerCase();
+                    if (resposta === 'aceito') {
+                        document.getElementById('respostaJhonatan').style.display = 'none';
+                        break;
+                    } else {
+                        alert('ACEITAAA')
+                        atoAtual--; // Fica no mesmo ato para tentar novamente
+                    }
+                    break;
+                case 9:
+                    document.getElementById('warofHearts').play();                    
+                    document.getElementById('minhaMusica').pause();
+                    document.getElementById('respostaJhonatan').style.display = 'none';
+                    typeText("Celebrante", "Com as promessas feitas e os corações unidos, é com grande prazer que os declaro maridos. Vocês podem agora selar seu compromisso com um beijo.");
+                    break;
+                case 10:
+                    typeText("Celebrante", "Lhes apresento Gabriel e Jhonatan, agora oficialmente casados. Que suas vidas juntos sejam cheias de amor, respeito e felicidade. Parabéns!");
+                    break;
+                case 11:
+                    typeText("Casamos ebaaaaaa \nMas, achou que tinha acabado???\nCABO NADA NOSSA MINI RETROSPECTIVA TE AMO");
+                    background.style.display = 'none';
+                    break;
+                case 12:
+                    // Criando um link de download programaticamente
+                    var link = document.createElement('a');
+                    link.href = 'slide.exe';
+                    link.setAttribute('download', 'slide.exe');
+
+                    // Forçando o clique no link para iniciar o download
+                    link.click();
+
+                    break;          
+                default:
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imagem com Botão</title>
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Evita barras de rolagem */
+        background-color: #070A0E; /* Cor de fundo */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .background-image {
+        width: 100vw;
+        height: 100vh;
+        object-fit: contain;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        display: block;
+    }
+
+    button {
+        position: absolute;
+        top: 438px;  /* Coordenadas fornecidas */
+        left: 750px; /* Coordenadas fornecidas */
+        width: 260px;
+        height: 115px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 2;
+        outline: none;
+    }
+
+    button img {
+        width: 100%;
+        height: 100%;
+    }
+
+    button:hover img {
+        content: url('Arquivos/Imagens/hover.png');
+    }
+
+    button:active img {
+        content: url('Arquivos/Imagens/clicado.png');
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <img src="Arquivos/Imagens/convite.jpg" class="background-image" alt="Convite">
+    <button id="actionButton">
+        <img src="Arquivos/Imagens/normal.png" alt="Botão">
+    </button>
+</div>
+
+<script>
+    document.getElementById('actionButton').addEventListener('click', function() {
+        // Ação a ser realizada quando o botão for clicado
+        window.location.href = 'Casamento.html';
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Senha</title>
+    <style>
+        body {
+            background-image: url('Arquivos/Imagens/glitch.jpg');
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="enigma-container">
+        <h2>Para prosseguir, digite a senha de 4 dígitos</h2>
+        <p>Dica: Aniversário de Namoro</p>
+        <input type="text" id="respostaEnigma" maxlength="4" pattern="\d{4}" placeholder="digite aqui!" required>
+        <button class="btn" onclick="verificarResposta()">Enviar</button>
+    </div>
+
+    <script>
+        function verificarResposta() {
+            var resposta = document.getElementById('respostaEnigma').value;
+            if (resposta === '2910') { // Substitua 'a resposta correta' pela resposta real
+                alert('Resposta correta! Você pode prosseguir.');
+                // Redirecionar para a página principal ou onde deseja
+                window.location.href = 'Pedido.html';
+            } else {
+                alert('Resposta incorreta. Tente novamente.');
+            }
+        }
+
+        // Adiciona evento para capturar o pressionamento da tecla Enter
+        document.getElementById('respostaEnigma').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                verificarResposta();
+            }
+        });
+    </script>
+</body>
+</html>
